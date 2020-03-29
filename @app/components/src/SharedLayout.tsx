@@ -152,6 +152,8 @@ export function SharedLayout({
   };
   const { data, loading, error } = query;
 
+  console.log("data", data);
+
   return (
     <Layout>
       {data && data.currentUser ? <CurrentUserUpdatedSubscription /> : null}

@@ -1,0 +1,5 @@
+mutation CreatePet($petName: String!) {
+  createPet(input: { petName: $petName }) {
+    clientMutationId
+  }
+}
