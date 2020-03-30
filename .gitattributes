@@ -4,3 +4,7 @@
 *.md text=auto eol=lf
 *.sh text=auto eol=lf
 *.yml text=auto eol=lf
+
+# these are for windows 10 machines
+migrations/committed/*.sql text eol=lf
+migrations/current.sql text eol=lf
