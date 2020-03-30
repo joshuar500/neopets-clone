@@ -16,7 +16,7 @@ ARG ROOT_URL
 COPY lerna.json package.json yarn.lock /app/
 COPY @app/ /app/@app/
 WORKDIR /app/
-RUN yarn install --frozen-lockfile --production=false --no-progress
+RUN yarn install --frozen-lockfile --production=false --no-progress --ignore-engines
 
 COPY tsconfig.json /app/
 # Folders must be copied separately, files can be copied all at once
@@ -73,7 +73,7 @@ WORKDIR /app/
 COPY --from=clean /app/ /app/
 
 # Install yarn ASAP because it's the slowest
-RUN yarn install --frozen-lockfile --production=true --no-progress
+RUN yarn install --frozen-lockfile --production=true --no-progress --ignore-engines
 
 # Import our shared args
 ARG PORT
