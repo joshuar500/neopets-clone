@@ -1,5 +1,6 @@
 import "antd/dist/antd.less";
 import "nprogress/nprogress.css";
+import "nes.css/css/nes.min.css";
 import "../styles.less";
 
 import { ApolloProvider } from "@apollo/react-hooks";
