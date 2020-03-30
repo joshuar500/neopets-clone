@@ -32,7 +32,8 @@ jobs:
       - name: setup database
         run: |
           cp .env.ci .env
-          yarn --frozen-lockfile
+          # TODO: remove --ignore-engines when node 12 is supported for NES.css
+          yarn --frozen-lockfile --ignore-engines
           CONFIRM_DROP=1 yarn setup
         env:
           CI: true
