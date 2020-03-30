@@ -4,7 +4,7 @@
   "private": true,
   "description": "Description of project here",
   "scripts": {
-    "setup": "yarn --ignore-engines && node ./scripts/setup.js",
+    "setup": "yarn && node ./scripts/setup.js",
     "start": "node ./scripts/start.js",
     "test": "node scripts/test.js",
     "test:watch": "node scripts/test.js --watch",

@@ -43,9 +43,9 @@ jobs:
       - name: Setup
         run: |
           cp .env.ci .env
-          yarn --frozen-lockfile
-          yarn setup
-          yarn build
+          yarn --frozen-lockfile --ignore-engines
+          yarn setup --ignore-engines
+          yarn build --ignore-engines
       - name: Start server in background
         run: yarn server start &
       - name: Start worker in background
