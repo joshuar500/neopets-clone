@@ -24,4 +24,10 @@ fragment SharedLayout_User on User {
       }
     }
   }
+  usersPets {
+    nodes {
+      id
+      petName
+    }
+  }
 }

@@ -1,0 +1,3 @@
+query PetPage($id: Int!) {
+  ...PetPage_Query
+}
