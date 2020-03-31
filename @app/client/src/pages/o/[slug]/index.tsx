@@ -12,7 +12,7 @@ import {
 import { formItemLayout } from "@app/lib";
 import { Button, Col, Empty, Form, Input, PageHeader, Row } from "antd";
 import { NextPage } from "next";
-import { Store } from "rc-field-form/lib/interface";
+// import { Store } from "rc-field-form/lib/interface";
 import React, { FC, useCallback } from "react";
 
 const OrganizationPage: NextPage = () => {
