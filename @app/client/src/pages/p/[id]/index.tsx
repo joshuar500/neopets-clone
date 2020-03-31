@@ -26,7 +26,7 @@ interface PetPageInnerProps {
   pet: PetPage_UsersPetsFragment;
 }
 
-const PetPageInner: FC<PetPageInnerProps> = (props) => {
+const PetPageInner: FC<PetPageInnerProps> = () => {
   // const { pet } = props;
 
   return (

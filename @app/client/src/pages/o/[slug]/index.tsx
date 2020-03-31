@@ -46,7 +46,7 @@ const OrganizationPageInner: FC<OrganizationPageInnerProps> = (props) => {
 
   // const [createPet] = useCreatePetMutation();
 
-  const handleSubmit = useCallback(async (values: Store) => {
+  const handleSubmit = useCallback(async () => {
     // try {
     //   const { petName } = values;
     //   const { data } = await createPet({
