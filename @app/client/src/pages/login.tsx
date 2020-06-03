@@ -60,6 +60,7 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
             {showLogin ? (
               <Col xs={24} sm={12}>
                 <Row>
+                  {JSON.stringify(currentUser)}
                   <LoginForm
                     onSuccessRedirectTo={next}
                     onCancel={() => setShowLogin(false)}
@@ -70,6 +71,7 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
               </Col>
             ) : (
               <Col xs={24} sm={12}>
+                {JSON.stringify(currentUser)}
                 <Row style={{ marginBottom: 8 }}>
                   <Col span={24}>
                     <Button
@@ -80,7 +82,7 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
                       onClick={() => setShowLogin(true)}
                       type="primary"
                     >
-                      Sign in with E-mail or Username
+                      Sign in with E-mail or Username BRO
                     </Button>
                   </Col>
                 </Row>
@@ -235,12 +237,16 @@ function LoginForm({
                     {" "}
                     (Error code: <code>ERR_{code}</code>)
                   </span>
-                ) : null}
+                ) : (
+                  <>something wrong with code</>
+                )}
               </span>
             }
           />
         </Form.Item>
-      ) : null}
+      ) : (
+        <>something wrong with error</>
+      )}
       <Form.Item>
         <Button
           type="primary"
