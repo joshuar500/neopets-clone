@@ -189,6 +189,7 @@ export function SharedLayout({
                 title
               )}
             </H3>
+            <span style={{ fontSize: "10px" }}>{JSON.stringify(data)}</span>
           </Col>
           <Col span={6} style={{ textAlign: "right" }}>
             {data && data.currentUser ? (
