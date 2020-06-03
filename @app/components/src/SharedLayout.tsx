@@ -148,12 +148,13 @@ export function SharedLayout({
       );
     }
 
-    return noPad ? <>we here</> : <StandardWidth>{inner}</StandardWidth>;
+    return noPad ? inner : <StandardWidth>{inner}</StandardWidth>;
   };
   const { data, loading, error } = query;
 
   return (
     <Layout>
+      {JSON.stringify(data)}
       {data && data.currentUser ? <CurrentUserUpdatedSubscription /> : null}
       <Header
         style={{
@@ -189,7 +190,6 @@ export function SharedLayout({
                 title
               )}
             </H3>
-            <span style={{ fontSize: "10px" }}>{JSON.stringify(data)}</span>
           </Col>
           <Col span={6} style={{ textAlign: "right" }}>
             {data && data.currentUser ? (
