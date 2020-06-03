@@ -53,7 +53,6 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
       query={query}
       forbidWhen={AuthRestrict.LOGGED_IN}
     >
-      {debug}
       {({ currentUser }: SharedLayoutChildProps) =>
         currentUser ? (
           <>
