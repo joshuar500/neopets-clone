@@ -148,7 +148,7 @@ export function SharedLayout({
       );
     }
 
-    return noPad ? inner : <StandardWidth>{inner}</StandardWidth>;
+    return noPad ? <>we here</> : <StandardWidth>{inner}</StandardWidth>;
   };
   const { data, loading, error } = query;
 

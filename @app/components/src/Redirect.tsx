@@ -21,7 +21,7 @@ export function Redirect({ href, as, layout }: RedirectProps) {
   if (layout) {
     return (
       <SharedLayout
-        title="Redirecting..."
+        title="Redirecting yo..."
         query={{
           loading: true,
           data: undefined,
@@ -29,7 +29,7 @@ export function Redirect({ href, as, layout }: RedirectProps) {
           networkStatus: 0,
           client,
           refetch: (async () => {
-            throw new Error("Redirecting...");
+            throw new Error("Redirecting error...");
           }) as any,
         }}
       >
@@ -39,7 +39,7 @@ export function Redirect({ href, as, layout }: RedirectProps) {
   } else {
     return (
       <StandardWidth>
-        <H3>Redirecting...</H3>
+        <H3>Redirecting standard...</H3>
         <Skeleton />
       </StandardWidth>
     );

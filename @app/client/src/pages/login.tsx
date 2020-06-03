@@ -44,6 +44,7 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
   const [error, setError] = useState<Error | ApolloError | null>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const next: string = isSafe(rawNext) ? rawNext! : "/";
+  console.log("#################### we trying to log in!");
   const query = useSharedQuery();
   return (
     <SharedLayout
