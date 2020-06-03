@@ -46,7 +46,7 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
   const next: string = isSafe(rawNext) ? rawNext! : "/";
   console.log("#################### we trying to log in!");
   const query = useSharedQuery();
-  const [debug, setDebug] = useState("");
+  const [debug, setDebug] = useState("yes");
   return (
     <SharedLayout
       title="Sign in"
@@ -56,9 +56,14 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
       {debug}
       {({ currentUser }: SharedLayoutChildProps) =>
         currentUser ? (
-          <Redirect href={next} />
+          <>
+            REDIRECTING LOL
+            {debug}
+            <Redirect href={next} />
+          </>
         ) : (
           <Row justify="center" style={{ marginTop: 32 }}>
+            <h1>{debug}</h1>
             {showLogin ? (
               <Col xs={24} sm={12}>
                 <Row>
@@ -204,7 +209,7 @@ function LoginForm({
       onValuesChange={handleValuesChange}
       style={{ width: "100%" }}
     >
-      {debug}
+      {/* {debug} */}
       <Form.Item
         name="username"
         rules={[{ required: true, message: "Please input your username" }]}
