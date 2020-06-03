@@ -46,12 +46,14 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
   const next: string = isSafe(rawNext) ? rawNext! : "/";
   console.log("#################### we trying to log in!");
   const query = useSharedQuery();
+  const [debug, setDebug] = useState("");
   return (
     <SharedLayout
       title="Sign in"
       query={query}
       forbidWhen={AuthRestrict.LOGGED_IN}
     >
+      {debug}
       {({ currentUser }: SharedLayoutChildProps) =>
         currentUser ? (
           <Redirect href={next} />
@@ -66,6 +68,8 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
                     onCancel={() => setShowLogin(false)}
                     error={error}
                     setError={setError}
+                    setDebug={setDebug}
+                    debug={debug}
                   />
                 </Row>
               </Col>
@@ -126,6 +130,8 @@ interface LoginFormProps {
   error: Error | ApolloError | null;
   setError: (error: Error | ApolloError | null) => void;
   onCancel: () => void;
+  setDebug: any;
+  debug: any;
 }
 
 function LoginForm({
@@ -133,6 +139,8 @@ function LoginForm({
   onCancel,
   error,
   setError,
+  setDebug,
+  debug,
 }: LoginFormProps) {
   const [form] = useForm();
   const [login] = useLoginMutation({});
@@ -142,6 +150,7 @@ function LoginForm({
   const handleSubmit = useCallback(
     async (values: Store) => {
       setError(null);
+      setDebug("here 1");
       try {
         await login({
           variables: {
@@ -149,11 +158,13 @@ function LoginForm({
             password: values.password,
           },
         });
+        setDebug("loggied in");
         // Success: refetch
         resetWebsocketConnection();
         client.resetStore();
         Router.push(onSuccessRedirectTo);
       } catch (e) {
+        setDebug("errored in");
         const code = getCodeFromError(e);
         if (code === "CREDS") {
           form.setFields([
@@ -165,11 +176,12 @@ function LoginForm({
           ]);
           setSubmitDisabled(true);
         } else {
+          setDebug("random errrrrr in");
           setError(e);
         }
       }
     },
-    [client, form, login, onSuccessRedirectTo, setError]
+    [client, form, login, onSuccessRedirectTo, setError, setDebug]
   );
 
   const focusElement = useRef<Input>(null);
@@ -192,6 +204,7 @@ function LoginForm({
       onValuesChange={handleValuesChange}
       style={{ width: "100%" }}
     >
+      {debug}
       <Form.Item
         name="username"
         rules={[{ required: true, message: "Please input your username" }]}
@@ -238,14 +251,14 @@ function LoginForm({
                     (Error code: <code>ERR_{code}</code>)
                   </span>
                 ) : (
-                  <>something wrong with code</>
+                  <>something wrong with code {code}</>
                 )}
               </span>
             }
           />
         </Form.Item>
       ) : (
-        <>something wrong with error</>
+        <>something wrong with error {error}</>
       )}
       <Form.Item>
         <Button
