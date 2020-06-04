@@ -21,7 +21,7 @@ export function usePetLoading(
   const { data, loading, error } = query;
 
   let child: JSX.Element | null = null;
-  const pet = data?.usersPet;
+  const pet = data?.userPet;
   if (pet) {
     //child = <OrganizationPageInner organization={organization} />;
   } else if (loading) {

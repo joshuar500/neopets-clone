@@ -29,7 +29,8 @@ export default async (app: Express) => {
 
   const passportInitializeMiddleware = passport.initialize();
   app.use(passportInitializeMiddleware);
-  getWebsocketMiddlewares(app).push(passportInitializeMiddleware);
+  // fix this typescript
+  getWebsocketMiddlewares(app).push(passportInitializeMiddleware as any);
 
   const passportSessionMiddleware = passport.session();
   app.use(passportSessionMiddleware);

@@ -1,5 +1,5 @@
 import { SharedLayout, usePetId, usePetLoading } from "@app/components";
-import { PetPage_UsersPetsFragment, usePetPageQuery } from "@app/graphql";
+import { PetPage_UserPetsFragment, usePetPageQuery } from "@app/graphql";
 import { Col, Row } from "antd";
 import { NextPage } from "next";
 import React, { FC } from "react";
@@ -23,7 +23,7 @@ const PetPage: NextPage = () => {
 };
 
 interface PetPageInnerProps {
-  pet: PetPage_UsersPetsFragment;
+  pet: PetPage_UserPetsFragment;
 }
 
 const PetPageInner: FC<PetPageInnerProps> = () => {

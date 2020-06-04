@@ -45,6 +45,11 @@ export default (app: Express) => {
        * redis for session storage when you're ready.
        */
       new PgStore({
+        /*
+         * Note even though "connect-pg-simple" lists "pg@7.x" as a dependency,
+         * it doesn't `require("pg")` if we pass it a pool. It's usage of the pg
+         * API is small; so it's compatible with pg@8.x.
+         */
         pool: rootPgPool,
         schemaName: "app_private",
         tableName: "connect_pg_simple_sessions",
@@ -62,5 +67,6 @@ export default (app: Express) => {
   });
 
   app.use(sessionMiddleware);
-  getWebsocketMiddlewares(app).push(sessionMiddleware);
+  // TODO: fix this typescript error
+  getWebsocketMiddlewares(app).push(sessionMiddleware as any);
 };

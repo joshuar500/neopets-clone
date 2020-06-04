@@ -152,8 +152,6 @@ export function SharedLayout({
   };
   const { data, loading, error } = query;
 
-  console.log("data", data);
-
   return (
     <Layout>
       {data && data.currentUser ? <CurrentUserUpdatedSubscription /> : null}
@@ -197,7 +195,7 @@ export function SharedLayout({
               <Dropdown
                 overlay={
                   <Menu>
-                    {data.currentUser.usersPets.nodes.map(({ id, petName }) => (
+                    {data.currentUser.userPets.nodes.map(({ id, petName }) => (
                       <Menu.Item key={id}>
                         <Link href={`/p/[id]`} as={`/p/${id}`}>
                           <a>Visit {petName}</a>

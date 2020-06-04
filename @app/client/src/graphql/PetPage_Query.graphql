@@ -1,4 +1,4 @@
-fragment PetPage_UsersPets on UsersPet {
+fragment PetPage_UserPets on UserPet {
   id
   petName
   lastFed
@@ -6,8 +6,8 @@ fragment PetPage_UsersPets on UsersPet {
 
 fragment PetPage_Query on Query {
   ...SharedLayout_Query
-  usersPet(id: $id) {
+  userPet(id: $id) {
     id
-    ...PetPage_UsersPets
+    ...PetPage_UserPets
   }
 }

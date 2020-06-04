@@ -119,47 +119,48 @@ relevant operations on them. The tables will appear when you uncomment the
 -- comment on column app_public.user_feed_posts.id is 'An identifier for this entry in the feed.';
 -- comment on column app_public.user_feed_posts.created_at is 'The time this feed item was added.';
 
+
 drop function if exists app_public.create_pet(pet_name text);
 drop function if exists app_public.feed_pet(pet_id int);
 
-drop table if exists app_public.users_pets;
+drop table if exists app_public.user_pets;
 
-create table app_public.users_pets (
+create table app_public.user_pets (
   id                  serial primary key,
   pet_name            text not null,
   user_id             uuid NOT NULL,
   created_at          timestamptz not null default now(),
   last_fed            timestamptz not null default now()
 );
-alter table app_public.users_pets enable row level security;
+alter table app_public.user_pets enable row level security;
 
 grant
   select,
   insert (pet_name),
   update (last_fed),
   delete
-on app_public.users_pets to :DATABASE_VISITOR;
+on app_public.user_pets to :DATABASE_VISITOR;
 
-create policy select_all on app_public.users_pets for select using (true);
-create policy manage_own on app_public.users_pets for all using (user_id = app_public.current_user_id());
+create policy select_all on app_public.user_pets for select using (true);
+create policy manage_own on app_public.user_pets for all using (user_id = app_public.current_user_id());
 
-comment on table app_public.users_pets is 'A pet owned by a `User`.';
-comment on column app_public.users_pets.id is 'The primary key for the `Pet`.';
-comment on column app_public.users_pets.user_id is 'The owner id is the `User`.';
-comment on column app_public.users_pets.pet_name is 'The name of the `Pet`.';
-comment on column app_public.users_pets.created_at is 'The timestamp for when the pet was born.';
-comment on column app_public.users_pets.last_fed is 'The timestamp for when the pet was last fed.';
+comment on table app_public.user_pets is 'A pet owned by a `User`.';
+comment on column app_public.user_pets.id is 'The primary key for the `Pet`.';
+comment on column app_public.user_pets.user_id is 'The owner id is the `User`.';
+comment on column app_public.user_pets.pet_name is 'The name of the `Pet`.';
+comment on column app_public.user_pets.created_at is 'The timestamp for when the pet was born.';
+comment on column app_public.user_pets.last_fed is 'The timestamp for when the pet was last fed.';
 
 -- create_pet --
 
-CREATE FUNCTION app_public.create_pet(pet_name text) RETURNS app_public.users_pets
+CREATE FUNCTION app_public.create_pet(pet_name text) RETURNS app_public.user_pets
     LANGUAGE plpgsql SECURITY DEFINER
     SET search_path TO 'pg_catalog', 'public', 'pg_temp'
     AS $$
 declare
-  v_pet app_public.users_pets;
+  v_pet app_public.user_pets;
 begin
-  insert into app_public.users_pets (pet_name, user_id) values (pet_name, app_public.current_user_id()) returning * into v_pet;
+  insert into app_public.user_pets (pet_name, user_id) values (pet_name, app_public.current_user_id()) returning * into v_pet;
   return v_pet;
 end;
 $$;
@@ -169,26 +170,26 @@ GRANT ALL ON FUNCTION app_public.create_pet(pet_name text) TO graphile_starter_v
 
 -- create index for users_pets --
 
-CREATE INDEX users_pets_user_id_idx ON app_public.users_pets USING btree (user_id);
+CREATE INDEX users_pets_user_id_idx ON app_public.user_pets USING btree (user_id);
 
-ALTER TABLE ONLY app_public.users_pets
+ALTER TABLE ONLY app_public.user_pets
     ADD CONSTRAINT users_pets_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_public.users(id);
 
 
 -- feed_pet --
 
-CREATE FUNCTION app_public.feed_pet(pet_id int) RETURNS app_public.users_pets
+CREATE FUNCTION app_public.feed_pet(pet_id int) RETURNS app_public.user_pets
     LANGUAGE plpgsql SECURITY DEFINER
     SET search_path TO 'pg_catalog', 'public', 'pg_temp'
     AS $$
 declare
-  v_pet app_public.users_pets;
+  v_pet app_public.user_pets;
 begin
-  update app_public.users_pets
+  update app_public.user_pets
   set
     last_fed = now()
   where id = pet_id;
-  select * into v_pet from app_public.users_pets where id = pet_id;
+  select * into v_pet from app_public.user_pets where id = pet_id;
   return v_pet;
 end;
 $$;
