@@ -30,6 +30,7 @@ type User = {
   name: string;
   is_admin: boolean;
   is_verified: boolean;
+  userPets: any;
 };
 
 function getCy(cyName: string): Chainable<JQuery<HTMLElement>> {

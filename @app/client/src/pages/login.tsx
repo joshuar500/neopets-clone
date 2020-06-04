@@ -44,9 +44,7 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
   const [error, setError] = useState<Error | ApolloError | null>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const next: string = isSafe(rawNext) ? rawNext! : "/";
-  console.log("#################### we trying to log in!");
   const query = useSharedQuery();
-  const [debug, setDebug] = useState("yes");
   return (
     <SharedLayout
       title="Sign in"
@@ -55,31 +53,22 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
     >
       {({ currentUser }: SharedLayoutChildProps) =>
         currentUser ? (
-          <>
-            REDIRECTING LOL
-            {debug}
-            <Redirect href={next} />
-          </>
+          <Redirect href={next} />
         ) : (
           <Row justify="center" style={{ marginTop: 32 }}>
-            <h1>{debug}</h1>
             {showLogin ? (
               <Col xs={24} sm={12}>
                 <Row>
-                  {JSON.stringify(currentUser)}
                   <LoginForm
                     onSuccessRedirectTo={next}
                     onCancel={() => setShowLogin(false)}
                     error={error}
                     setError={setError}
-                    setDebug={setDebug}
-                    debug={debug}
                   />
                 </Row>
               </Col>
             ) : (
               <Col xs={24} sm={12}>
-                {JSON.stringify(currentUser)}
                 <Row style={{ marginBottom: 8 }}>
                   <Col span={24}>
                     <Button
@@ -134,8 +123,6 @@ interface LoginFormProps {
   error: Error | ApolloError | null;
   setError: (error: Error | ApolloError | null) => void;
   onCancel: () => void;
-  setDebug: any;
-  debug: any;
 }
 
 function LoginForm({
@@ -143,8 +130,6 @@ function LoginForm({
   onCancel,
   error,
   setError,
-  setDebug,
-  debug,
 }: LoginFormProps) {
   const [form] = useForm();
   const [login] = useLoginMutation({});
@@ -154,7 +139,6 @@ function LoginForm({
   const handleSubmit = useCallback(
     async (values: Store) => {
       setError(null);
-      setDebug("here 1");
       try {
         await login({
           variables: {
@@ -162,13 +146,11 @@ function LoginForm({
             password: values.password,
           },
         });
-        setDebug("loggied in");
         // Success: refetch
         resetWebsocketConnection();
         client.resetStore();
         Router.push(onSuccessRedirectTo);
       } catch (e) {
-        setDebug("errored in");
         const code = getCodeFromError(e);
         if (code === "CREDS") {
           form.setFields([
@@ -180,12 +162,11 @@ function LoginForm({
           ]);
           setSubmitDisabled(true);
         } else {
-          setDebug("random errrrrr in");
           setError(e);
         }
       }
     },
-    [client, form, login, onSuccessRedirectTo, setError, setDebug]
+    [client, form, login, onSuccessRedirectTo, setError]
   );
 
   const focusElement = useRef<Input>(null);
@@ -254,16 +235,12 @@ function LoginForm({
                     {" "}
                     (Error code: <code>ERR_{code}</code>)
                   </span>
-                ) : (
-                  <>something wrong with code {code}</>
-                )}
+                ) : null}
               </span>
             }
           />
         </Form.Item>
-      ) : (
-        <>something wrong with error {error}</>
-      )}
+      ) : null}
       <Form.Item>
         <Button
           type="primary"

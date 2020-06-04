@@ -24,7 +24,7 @@ fragment SharedLayout_User on User {
       }
     }
   }
-  usersPets {
+  usersPets(first: 20) {
     nodes {
       id
       petName

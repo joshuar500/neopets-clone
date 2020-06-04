@@ -152,9 +152,10 @@ export function SharedLayout({
   };
   const { data, loading, error } = query;
 
+  console.log("data", data);
+
   return (
     <Layout>
-      {JSON.stringify(data)}
       {data && data.currentUser ? <CurrentUserUpdatedSubscription /> : null}
       <Header
         style={{
@@ -225,6 +226,11 @@ export function SharedLayout({
                         </Menu.Item>
                       )
                     )}
+                    <Menu.Item>
+                      <Link href="/create-pet">
+                        <a data-cy="layout-link-create-pet">Create pet</a>
+                      </Link>
+                    </Menu.Item>
                     <Menu.Item>
                       <Link href="/create-organization">
                         <a data-cy="layout-link-create-organization">

@@ -56,8 +56,6 @@ class MyApp extends App<{ apollo: ApolloClient<any> }> {
 
     return (
       <ApolloProvider client={apollo}>
-        <div style={{ marginTop: "20px" }}>hello world</div>
-        <>{JSON.stringify(pageProps)}</>
         <Component {...pageProps} />
       </ApolloProvider>
     );
