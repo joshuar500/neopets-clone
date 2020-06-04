@@ -8,7 +8,7 @@ const PetPage: NextPage = () => {
   const id = usePetId();
   const query = usePetPageQuery({ variables: { id } });
   const petLoadingElement = usePetLoading(query);
-  const pet = query?.data?.usersPet;
+  const pet = query?.data?.userPet;
 
   return (
     <SharedLayout
