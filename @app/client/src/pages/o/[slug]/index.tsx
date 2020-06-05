@@ -12,7 +12,7 @@ import {
 import { formItemLayout } from "@app/lib";
 import { Button, Col, Empty, Form, Input, PageHeader, Row } from "antd";
 import { NextPage } from "next";
-import { Store } from "rc-field-form/lib/interface";
+// import { Store } from "rc-field-form/lib/interface";
 import React, { FC, useCallback } from "react";
 
 const OrganizationPage: NextPage = () => {
@@ -46,8 +46,7 @@ const OrganizationPageInner: FC<OrganizationPageInnerProps> = (props) => {
 
   // const [createPet] = useCreatePetMutation();
 
-  const handleSubmit = useCallback(async (values: Store) => {
-    console.log("what happened", values);
+  const handleSubmit = useCallback(async () => {
     // try {
     //   const { petName } = values;
     //   const { data } = await createPet({

@@ -1,0 +1,13 @@
+fragment PetPage_UserPets on UserPet {
+  id
+  petName
+  lastFed
+}
+
+fragment PetPage_Query on Query {
+  ...SharedLayout_Query
+  userPet(id: $id) {
+    id
+    ...PetPage_UserPets
+  }
+}

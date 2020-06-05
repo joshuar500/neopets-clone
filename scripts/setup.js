@@ -189,7 +189,7 @@ async function main() {
       name: "DATABASE_HOST",
       message:
         "What's the hostname of your database server (include :port if it's not the default :5432)?",
-      default: "localhost",
+      default: "josh:mypass@127.0.0.1",
       when: !("DATABASE_HOST" in config),
     },
 
@@ -204,7 +204,7 @@ async function main() {
         (answers) =>
           `postgres://${
             answers.DATABASE_HOST === "localhost" ? "" : answers.DATABASE_HOST
-          }/template1`
+          }/mydb`
       ),
       when: !config.ROOT_DATABASE_URL,
     },

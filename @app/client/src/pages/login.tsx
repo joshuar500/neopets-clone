@@ -79,7 +79,7 @@ const Login: NextPage<LoginProps> = ({ next: rawNext }) => {
                       onClick={() => setShowLogin(true)}
                       type="primary"
                     >
-                      Sign in with E-mail or Username
+                      Sign in with E-mail or Username BRO
                     </Button>
                   </Col>
                 </Row>
@@ -189,6 +189,7 @@ function LoginForm({
       onValuesChange={handleValuesChange}
       style={{ width: "100%" }}
     >
+      {/* {debug} */}
       <Form.Item
         name="username"
         rules={[{ required: true, message: "Please input your username" }]}

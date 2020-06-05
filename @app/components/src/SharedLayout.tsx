@@ -152,7 +152,14 @@ export function SharedLayout({
   };
   const { data, loading, error } = query;
 
-  console.log("data", data);
+  console.log("-------------------data----------------");
+  console.log(JSON.stringify(error));
+  console.log(JSON.stringify(data));
+  console.log(data?.currentUser);
+  console.log(data?.currentUser?.name);
+  console.log(data?.currentUser?.username);
+  console.log(data?.currentUser?.userPets);
+  console.log("-------------------end data----------------");
 
   return (
     <Layout>
@@ -197,6 +204,13 @@ export function SharedLayout({
               <Dropdown
                 overlay={
                   <Menu>
+                    {data.currentUser.userPets.nodes.map(({ id, petName }) => (
+                      <Menu.Item key={id}>
+                        <Link href={`/p/[id]`} as={`/p/${id}`}>
+                          <a>Visit {petName}</a>
+                        </Link>
+                      </Menu.Item>
+                    ))}
                     {data.currentUser.organizationMemberships.nodes.map(
                       ({ organization, isOwner }) => (
                         <Menu.Item key={organization?.id}>
@@ -219,6 +233,11 @@ export function SharedLayout({
                         </Menu.Item>
                       )
                     )}
+                    <Menu.Item>
+                      <Link href="/create-pet">
+                        <a data-cy="layout-link-create-pet">Create pet</a>
+                      </Link>
+                    </Menu.Item>
                     <Menu.Item>
                       <Link href="/create-organization">
                         <a data-cy="layout-link-create-organization">

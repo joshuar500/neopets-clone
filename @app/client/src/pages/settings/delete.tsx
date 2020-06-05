@@ -103,8 +103,9 @@ const Settings_Accounts: NextPage = () => {
               </P>
               <Button
                 onClick={confirmDeletion}
-                type="danger"
+                type="primary"
                 disabled={deleting}
+                danger
               >
                 PERMANENTLY DELETE MY ACCOUNT
               </Button>
@@ -133,7 +134,7 @@ const Settings_Accounts: NextPage = () => {
                 Deleting your account cannot be undone, you will lose all your
                 data.
               </P>
-              <Button onClick={openModal} type="danger">
+              <Button onClick={openModal} type="primary" danger>
                 I want to delete my account
               </Button>
             </>

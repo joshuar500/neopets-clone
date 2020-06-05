@@ -40,7 +40,7 @@ export function makeShutdownActions(): ShutdownAction[] {
     }
 
     // Guarantee the callback will be called
-    const guaranteeCallback = setTimeout(callbackOnce, 3000);
+    const guaranteeCallback = <any>setTimeout(callbackOnce, 3000);
     guaranteeCallback.unref();
 
     Promise.all(promises).then(callbackOnce, callbackOnce);
