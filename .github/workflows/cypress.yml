@@ -19,7 +19,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:11
+        image: postgres:12
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install pg_dump
-        run: sudo apt-get install postgresql-client-11
+        run: sudo apt-get install postgresql-client-12
       - name: Setup
         run: |
           cp .env.ci .env
