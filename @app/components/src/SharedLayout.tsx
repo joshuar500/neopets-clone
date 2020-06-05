@@ -153,9 +153,9 @@ export function SharedLayout({
   const { data, loading, error } = query;
 
   console.log("-------------------data----------------");
-  console.log(query);
-  console.log(error);
-  console.log(data);
+  console.log(JSON.stringify(query));
+  console.log(JSON.stringify(error));
+  console.log(JSON.stringify(data));
   console.log(data?.currentUser);
   console.log(data?.currentUser?.name);
   console.log(data?.currentUser?.username);
