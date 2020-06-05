@@ -828,6 +828,78 @@ $$;
 
 
 --
+-- Name: user_pets; Type: TABLE; Schema: app_public; Owner: -
+--
+
+CREATE TABLE app_public.user_pets (
+    id integer NOT NULL,
+    pet_name text NOT NULL,
+    user_id uuid NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    last_fed timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
+-- Name: TABLE user_pets; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON TABLE app_public.user_pets IS 'A pet owned by a `User`.';
+
+
+--
+-- Name: COLUMN user_pets.id; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.id IS 'The primary key for the `Pet`.';
+
+
+--
+-- Name: COLUMN user_pets.pet_name; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.pet_name IS 'The name of the `Pet`.';
+
+
+--
+-- Name: COLUMN user_pets.user_id; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.user_id IS 'The owner id is the `User`.';
+
+
+--
+-- Name: COLUMN user_pets.created_at; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.created_at IS 'The timestamp for when the pet was born.';
+
+
+--
+-- Name: COLUMN user_pets.last_fed; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.last_fed IS 'The timestamp for when the pet was last fed.';
+
+
+--
+-- Name: create_pet(text); Type: FUNCTION; Schema: app_public; Owner: -
+--
+
+CREATE FUNCTION app_public.create_pet(pet_name text) RETURNS app_public.user_pets
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'pg_catalog', 'public', 'pg_temp'
+    AS $$
+declare
+  v_pet app_public.user_pets;
+begin
+  insert into app_public.user_pets (pet_name, user_id) values (pet_name, app_public.current_user_id()) returning * into v_pet;
+  return v_pet;
+end;
+$$;
+
+
+--
 -- Name: current_session_id(); Type: FUNCTION; Schema: app_public; Owner: -
 --
 
@@ -926,6 +998,27 @@ begin
   ) then
     delete from app_public.organizations where id = organization_id;
   end if;
+end;
+$$;
+
+
+--
+-- Name: feed_pet(integer); Type: FUNCTION; Schema: app_public; Owner: -
+--
+
+CREATE FUNCTION app_public.feed_pet(pet_id integer) RETURNS app_public.user_pets
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'pg_catalog', 'public', 'pg_temp'
+    AS $$
+declare
+  v_pet app_public.user_pets;
+begin
+  update app_public.user_pets
+  set
+    last_fed = now()
+  where id = pet_id;
+  select * into v_pet from app_public.user_pets where id = pet_id;
+  return v_pet;
 end;
 $$;
 
@@ -1852,6 +1945,33 @@ COMMENT ON COLUMN app_public.user_authentications.details IS 'Additional profile
 
 
 --
+-- Name: user_pets_id_seq; Type: SEQUENCE; Schema: app_public; Owner: -
+--
+
+CREATE SEQUENCE app_public.user_pets_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_pets_id_seq; Type: SEQUENCE OWNED BY; Schema: app_public; Owner: -
+--
+
+ALTER SEQUENCE app_public.user_pets_id_seq OWNED BY app_public.user_pets.id;
+
+
+--
+-- Name: user_pets id; Type: DEFAULT; Schema: app_public; Owner: -
+--
+
+ALTER TABLE ONLY app_public.user_pets ALTER COLUMN id SET DEFAULT nextval('app_public.user_pets_id_seq'::regclass);
+
+
+--
 -- Name: connect_pg_simple_sessions session_pkey; Type: CONSTRAINT; Schema: app_private; Owner: -
 --
 
@@ -1988,6 +2108,14 @@ ALTER TABLE ONLY app_public.user_emails
 
 
 --
+-- Name: user_pets user_pets_pkey; Type: CONSTRAINT; Schema: app_public; Owner: -
+--
+
+ALTER TABLE ONLY app_public.user_pets
+    ADD CONSTRAINT user_pets_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: app_public; Owner: -
 --
 
@@ -2050,6 +2178,13 @@ CREATE UNIQUE INDEX uniq_user_emails_verified_email ON app_public.user_emails US
 --
 
 CREATE INDEX user_authentications_user_id_idx ON app_public.user_authentications USING btree (user_id);
+
+
+--
+-- Name: users_pets_user_id_idx; Type: INDEX; Schema: app_public; Owner: -
+--
+
+CREATE INDEX users_pets_user_id_idx ON app_public.user_pets USING btree (user_id);
 
 
 --
@@ -2224,6 +2359,14 @@ ALTER TABLE ONLY app_public.user_emails
 
 
 --
+-- Name: user_pets users_pets_user_id_fkey; Type: FK CONSTRAINT; Schema: app_public; Owner: -
+--
+
+ALTER TABLE ONLY app_public.user_pets
+    ADD CONSTRAINT users_pets_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_public.users(id);
+
+
+--
 -- Name: connect_pg_simple_sessions; Type: ROW SECURITY; Schema: app_private; Owner: -
 --
 
@@ -2275,6 +2418,13 @@ CREATE POLICY insert_own ON app_public.user_emails FOR INSERT WITH CHECK ((user_
 
 
 --
+-- Name: user_pets manage_own; Type: POLICY; Schema: app_public; Owner: -
+--
+
+CREATE POLICY manage_own ON app_public.user_pets USING ((user_id = app_public.current_user_id()));
+
+
+--
 -- Name: organization_invitations; Type: ROW SECURITY; Schema: app_public; Owner: -
 --
 
@@ -2291,6 +2441,13 @@ ALTER TABLE app_public.organization_memberships ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE app_public.organizations ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: user_pets select_all; Type: POLICY; Schema: app_public; Owner: -
+--
+
+CREATE POLICY select_all ON app_public.user_pets FOR SELECT USING (true);
+
 
 --
 -- Name: users select_all; Type: POLICY; Schema: app_public; Owner: -
@@ -2368,6 +2525,12 @@ ALTER TABLE app_public.user_authentications ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE app_public.user_emails ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: user_pets; Type: ROW SECURITY; Schema: app_public; Owner: -
+--
+
+ALTER TABLE app_public.user_pets ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: users; Type: ROW SECURITY; Schema: app_public; Owner: -
@@ -2550,6 +2713,35 @@ GRANT ALL ON FUNCTION app_public.create_organization(slug public.citext, name te
 
 
 --
+-- Name: TABLE user_pets; Type: ACL; Schema: app_public; Owner: -
+--
+
+GRANT SELECT,DELETE ON TABLE app_public.user_pets TO graphile_starter_visitor;
+
+
+--
+-- Name: COLUMN user_pets.pet_name; Type: ACL; Schema: app_public; Owner: -
+--
+
+GRANT INSERT(pet_name) ON TABLE app_public.user_pets TO graphile_starter_visitor;
+
+
+--
+-- Name: COLUMN user_pets.last_fed; Type: ACL; Schema: app_public; Owner: -
+--
+
+GRANT UPDATE(last_fed) ON TABLE app_public.user_pets TO graphile_starter_visitor;
+
+
+--
+-- Name: FUNCTION create_pet(pet_name text); Type: ACL; Schema: app_public; Owner: -
+--
+
+REVOKE ALL ON FUNCTION app_public.create_pet(pet_name text) FROM PUBLIC;
+GRANT ALL ON FUNCTION app_public.create_pet(pet_name text) TO graphile_starter_visitor;
+
+
+--
 -- Name: FUNCTION current_session_id(); Type: ACL; Schema: app_public; Owner: -
 --
 
@@ -2595,6 +2787,14 @@ GRANT ALL ON FUNCTION app_public.current_user_member_organization_ids() TO graph
 
 REVOKE ALL ON FUNCTION app_public.delete_organization(organization_id uuid) FROM PUBLIC;
 GRANT ALL ON FUNCTION app_public.delete_organization(organization_id uuid) TO graphile_starter_visitor;
+
+
+--
+-- Name: FUNCTION feed_pet(pet_id integer); Type: ACL; Schema: app_public; Owner: -
+--
+
+REVOKE ALL ON FUNCTION app_public.feed_pet(pet_id integer) FROM PUBLIC;
+GRANT ALL ON FUNCTION app_public.feed_pet(pet_id integer) TO graphile_starter_visitor;
 
 
 --
@@ -2774,6 +2974,13 @@ GRANT SELECT ON TABLE app_public.organization_memberships TO graphile_starter_vi
 --
 
 GRANT SELECT,DELETE ON TABLE app_public.user_authentications TO graphile_starter_visitor;
+
+
+--
+-- Name: SEQUENCE user_pets_id_seq; Type: ACL; Schema: app_public; Owner: -
+--
+
+GRANT SELECT,USAGE ON SEQUENCE app_public.user_pets_id_seq TO graphile_starter_visitor;
 
 
 --
