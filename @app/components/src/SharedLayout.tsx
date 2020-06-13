@@ -152,15 +152,6 @@ export function SharedLayout({
   };
   const { data, loading, error } = query;
 
-  console.log("-------------------data----------------");
-  console.log(JSON.stringify(error));
-  console.log(JSON.stringify(data));
-  console.log(data?.currentUser);
-  console.log(data?.currentUser?.name);
-  console.log(data?.currentUser?.username);
-  console.log(data?.currentUser?.userPets);
-  console.log("-------------------end data----------------");
-
   return (
     <Layout>
       {data && data.currentUser ? <CurrentUserUpdatedSubscription /> : null}

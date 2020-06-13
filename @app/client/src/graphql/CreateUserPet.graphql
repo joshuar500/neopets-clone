@@ -1,0 +1,15 @@
+fragment CreatedUserPet on UserPet {
+  id
+  petName
+  slug
+  level
+}
+
+mutation CreateUserPet($petName: String!, $slug: String!) {
+  createUserPet(input: { userPet: { petName: $petName, slug: $slug } }) {
+    userPet {
+      id
+      ...CreatedUserPet
+    }
+  }
+}

@@ -106,40 +106,6 @@ type CreateOrganizationPayload {
   query: Query
 }
 
-"""All input for the `createPet` mutation."""
-input CreatePetInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  petName: String!
-}
-
-"""The output of our `createPet` mutation."""
-type CreatePetPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """Reads a single `User` that is related to this `UserPet`."""
-  user: User
-  userPet: UserPet
-
-  """An edge for our `UserPet`. May be used by Relay 1."""
-  userPetEdge(
-    """The method to use when ordering `UserPet`."""
-    orderBy: [UserPetsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UserPetsEdge
-}
-
 """All input for the create `UserEmail` mutation."""
 input CreateUserEmailInput {
   """
@@ -535,12 +501,6 @@ type Mutation {
     """
     input: CreateOrganizationInput!
   ): CreateOrganizationPayload
-  createPet(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreatePetInput!
-  ): CreatePetPayload
 
   """Creates a single `UserEmail`."""
   createUserEmail(
@@ -1133,6 +1093,7 @@ type Query {
   userByUsername(username: String!): User
   userEmail(id: UUID!): UserEmail
   userPet(id: Int!): UserPet
+  userPetBySlug(slug: String!): UserPet
 
   """Reads and enables pagination through a set of `UserPet`."""
   userPets(
@@ -1774,14 +1735,23 @@ type UserPet {
   """The timestamp for when the pet was born."""
   createdAt: Datetime!
 
+  """The experience of the pet."""
+  experience: Int!
+
   """The primary key for the `Pet`."""
   id: Int!
 
   """The timestamp for when the pet was last fed."""
   lastFed: Datetime!
 
+  """The level of the pet."""
+  level: Int!
+
   """The name of the `Pet`."""
   petName: String!
+
+  """The url for the pet."""
+  slug: String!
 
   """Reads a single `User` that is related to this `UserPet`."""
   user: User
@@ -1797,6 +1767,9 @@ input UserPetCondition {
   """Checks for equality with the object’s `id` field."""
   id: Int
 
+  """Checks for equality with the object’s `slug` field."""
+  slug: String
+
   """Checks for equality with the object’s `userId` field."""
   userId: UUID
 }
@@ -1805,6 +1778,9 @@ input UserPetCondition {
 input UserPetInput {
   """The name of the `Pet`."""
   petName: String!
+
+  """The url for the pet."""
+  slug: String!
 }
 
 """
@@ -1848,6 +1824,8 @@ enum UserPetsOrderBy {
   NATURAL
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
+  SLUG_ASC
+  SLUG_DESC
   USER_ID_ASC
   USER_ID_DESC
 }
