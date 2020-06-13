@@ -2,6 +2,9 @@ fragment PetPage_UserPets on UserPet {
   id
   petName
   lastFed
+  slug
+  experience
+  level
 }
 
 fragment PetPage_Query on Query {

@@ -6,10 +6,10 @@ import React from "react";
 
 import { ErrorAlert, FourOhFour } from "./";
 
-export function usePetId() {
+export function usePetSlug() {
   const router = useRouter();
-  const { id: rawId } = router.query;
-  return Number(rawId);
+  const { slug: rawSlug } = router.query;
+  return String(rawSlug);
 }
 
 export function usePetLoading(

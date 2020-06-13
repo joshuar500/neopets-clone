@@ -1,20 +1,20 @@
-import { SharedLayout, usePetId, usePetLoading } from "@app/components";
+import { SharedLayout, usePetLoading, usePetSlug } from "@app/components";
 import { PetPage_UserPetsFragment, usePetPageQuery } from "@app/graphql";
 import { Col, Row } from "antd";
 import { NextPage } from "next";
 import React, { FC } from "react";
 
 const PetPage: NextPage = () => {
-  const id = usePetId();
-  const query = usePetPageQuery({ variables: { id } });
+  const slug = usePetSlug();
+  const query = usePetPageQuery({ variables: { slug } });
   const petLoadingElement = usePetLoading(query);
   const pet = query?.data?.userPet;
 
   return (
     <SharedLayout
-      title={`${pet?.petName ?? id}`}
-      titleHref={`/o/[id]`}
-      titleHrefAs={`/o/${id}`}
+      title={`${pet?.petName ?? slug}`}
+      titleHref={`/o/[slug]`}
+      titleHrefAs={`/o/${slug}`}
       query={query}
     >
       {petLoadingElement || <PetPageInner pet={pet!} />}

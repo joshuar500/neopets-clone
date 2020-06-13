@@ -144,19 +144,18 @@ type CreateUserEmailPayload {
   ): UserEmailsEdge
 }
 
-"""All input for the create `UserPet` mutation."""
+"""All input for the `createUserPet` mutation."""
 input CreateUserPetInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
   """
   clientMutationId: String
-
-  """The `UserPet` to be created by this mutation."""
-  userPet: UserPetInput!
+  petName: String!
+  slug: String!
 }
 
-"""The output of our create `UserPet` mutation."""
+"""The output of our `createUserPet` mutation."""
 type CreateUserPetPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
@@ -171,8 +170,6 @@ type CreateUserPetPayload {
 
   """Reads a single `User` that is related to this `UserPet`."""
   user: User
-
-  """The `UserPet` that was created by this mutation."""
   userPet: UserPet
 
   """An edge for our `UserPet`. May be used by Relay 1."""
@@ -509,8 +506,6 @@ type Mutation {
     """
     input: CreateUserEmailInput!
   ): CreateUserEmailPayload
-
-  """Creates a single `UserPet`."""
   createUserPet(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -1774,21 +1769,18 @@ input UserPetCondition {
   userId: UUID
 }
 
-"""An input for mutations affecting `UserPet`"""
-input UserPetInput {
-  """The name of the `Pet`."""
-  petName: String!
-
-  """The url for the pet."""
-  slug: String!
-}
-
 """
 Represents an update to a `UserPet`. Fields that are set will be updated.
 """
 input UserPetPatch {
+  """The experience of the pet."""
+  experience: Int
+
   """The timestamp for when the pet was last fed."""
   lastFed: Datetime
+
+  """The level of the pet."""
+  level: Int
 }
 
 """A connection to a list of `UserPet` values."""
