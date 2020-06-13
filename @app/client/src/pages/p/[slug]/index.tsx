@@ -8,13 +8,13 @@ const PetPage: NextPage = () => {
   const slug = usePetSlug();
   const query = usePetPageQuery({ variables: { slug } });
   const petLoadingElement = usePetLoading(query);
-  const pet = query?.data?.userPet;
+  const pet = query?.data?.userPetBySlug;
 
   return (
     <SharedLayout
       title={`${pet?.petName ?? slug}`}
-      titleHref={`/o/[slug]`}
-      titleHrefAs={`/o/${slug}`}
+      titleHref={`/p/[slug]`}
+      titleHrefAs={`/p/${slug}`}
       query={query}
     >
       {petLoadingElement || <PetPageInner pet={pet!} />}

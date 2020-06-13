@@ -28,6 +28,7 @@ fragment SharedLayout_User on User {
     nodes {
       id
       petName
+      slug
     }
   }
 }

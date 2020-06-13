@@ -9,7 +9,7 @@ fragment PetPage_UserPets on UserPet {
 
 fragment PetPage_Query on Query {
   ...SharedLayout_Query
-  userPet(id: $id) {
+  userPetBySlug(slug: $slug) {
     id
     ...PetPage_UserPets
   }

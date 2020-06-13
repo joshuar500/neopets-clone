@@ -195,13 +195,15 @@ export function SharedLayout({
               <Dropdown
                 overlay={
                   <Menu>
-                    {data.currentUser.userPets.nodes.map(({ id, petName }) => (
-                      <Menu.Item key={id}>
-                        <Link href={`/p/[id]`} as={`/p/${id}`}>
-                          <a>Visit {petName}</a>
-                        </Link>
-                      </Menu.Item>
-                    ))}
+                    {data.currentUser.userPets.nodes.map(
+                      ({ slug, petName }) => (
+                        <Menu.Item key={slug}>
+                          <Link href={`/p/[id]`} as={`/p/${slug}`}>
+                            <a>Visit {petName}</a>
+                          </Link>
+                        </Menu.Item>
+                      )
+                    )}
                     {data.currentUser.organizationMemberships.nodes.map(
                       ({ organization, isOwner }) => (
                         <Menu.Item key={organization?.id}>

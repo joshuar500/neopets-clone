@@ -847,7 +847,8 @@ CREATE TABLE app_public.user_pets (
 -- Name: TABLE user_pets; Type: COMMENT; Schema: app_public; Owner: -
 --
 
-COMMENT ON TABLE app_public.user_pets IS 'A pet owned by a `User`.';
+COMMENT ON TABLE app_public.user_pets IS '@omit create
+A pet owned by a `User`.';
 
 
 --
