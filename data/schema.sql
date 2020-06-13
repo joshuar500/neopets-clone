@@ -836,7 +836,10 @@ CREATE TABLE app_public.user_pets (
     pet_name text NOT NULL,
     user_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    last_fed timestamp with time zone DEFAULT now() NOT NULL
+    last_fed timestamp with time zone DEFAULT now() NOT NULL,
+    level integer DEFAULT 1 NOT NULL,
+    experience integer DEFAULT 1 NOT NULL,
+    slug public.citext NOT NULL
 );
 
 
@@ -883,6 +886,27 @@ COMMENT ON COLUMN app_public.user_pets.last_fed IS 'The timestamp for when the p
 
 
 --
+-- Name: COLUMN user_pets.level; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.level IS 'The level of the pet.';
+
+
+--
+-- Name: COLUMN user_pets.experience; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.experience IS 'The experience of the pet.';
+
+
+--
+-- Name: COLUMN user_pets.slug; Type: COMMENT; Schema: app_public; Owner: -
+--
+
+COMMENT ON COLUMN app_public.user_pets.slug IS 'The url for the pet.';
+
+
+--
 -- Name: create_pet(text); Type: FUNCTION; Schema: app_public; Owner: -
 --
 
@@ -894,6 +918,23 @@ declare
   v_pet app_public.user_pets;
 begin
   insert into app_public.user_pets (pet_name, user_id) values (pet_name, app_public.current_user_id()) returning * into v_pet;
+  return v_pet;
+end;
+$$;
+
+
+--
+-- Name: create_pet(text, public.citext); Type: FUNCTION; Schema: app_public; Owner: -
+--
+
+CREATE FUNCTION app_public.create_pet(pet_name text, slug public.citext) RETURNS app_public.user_pets
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'pg_catalog', 'public', 'pg_temp'
+    AS $$
+declare
+  v_pet app_public.user_pets;
+begin
+  insert into app_public.user_pets (pet_name, user_id, slug) values (pet_name, app_public.current_user_id(), slug) returning * into v_pet;
   return v_pet;
 end;
 $$;
@@ -2116,6 +2157,14 @@ ALTER TABLE ONLY app_public.user_pets
 
 
 --
+-- Name: user_pets user_pets_slug_key; Type: CONSTRAINT; Schema: app_public; Owner: -
+--
+
+ALTER TABLE ONLY app_public.user_pets
+    ADD CONSTRAINT user_pets_slug_key UNIQUE (slug);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: app_public; Owner: -
 --
 
@@ -2734,11 +2783,26 @@ GRANT UPDATE(last_fed) ON TABLE app_public.user_pets TO graphile_starter_visitor
 
 
 --
+-- Name: COLUMN user_pets.slug; Type: ACL; Schema: app_public; Owner: -
+--
+
+GRANT INSERT(slug) ON TABLE app_public.user_pets TO graphile_starter_visitor;
+
+
+--
 -- Name: FUNCTION create_pet(pet_name text); Type: ACL; Schema: app_public; Owner: -
 --
 
 REVOKE ALL ON FUNCTION app_public.create_pet(pet_name text) FROM PUBLIC;
 GRANT ALL ON FUNCTION app_public.create_pet(pet_name text) TO graphile_starter_visitor;
+
+
+--
+-- Name: FUNCTION create_pet(pet_name text, slug public.citext); Type: ACL; Schema: app_public; Owner: -
+--
+
+REVOKE ALL ON FUNCTION app_public.create_pet(pet_name text, slug public.citext) FROM PUBLIC;
+GRANT ALL ON FUNCTION app_public.create_pet(pet_name text, slug public.citext) TO graphile_starter_visitor;
 
 
 --

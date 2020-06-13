@@ -1,0 +1,7 @@
+query UserPetBySlug($slug: String!) {
+  userPetBySlug(slug: $slug) {
+    id
+    petName
+    slug
+  }
+}
