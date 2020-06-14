@@ -7,13 +7,10 @@ import {
 import {
   OrganizationPage_OrganizationFragment,
   useOrganizationPageQuery,
-  // useCreatePetMutation,
 } from "@app/graphql";
-import { formItemLayout } from "@app/lib";
-import { Button, Col, Empty, Form, Input, PageHeader, Row } from "antd";
+import { Col, Empty, PageHeader, Row } from "antd";
 import { NextPage } from "next";
-// import { Store } from "rc-field-form/lib/interface";
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 
 const OrganizationPage: NextPage = () => {
   const slug = useOrganizationSlug();
@@ -41,25 +38,6 @@ interface OrganizationPageInnerProps {
 
 const OrganizationPageInner: FC<OrganizationPageInnerProps> = (props) => {
   const { organization } = props;
-
-  const [form] = Form.useForm();
-
-  // const [createPet] = useCreatePetMutation();
-
-  const handleSubmit = useCallback(async () => {
-    // try {
-    //   const { petName } = values;
-    //   const { data } = await createPet({
-    //     variables: {
-    //       petName,
-    //     },
-    //   });
-    //   console.log("data", data);
-    // } catch (e) {
-    //   console.log("there was an error", e);
-    // }
-  }, []);
-
   return (
     <Row>
       <Col flex={1}>
@@ -91,14 +69,6 @@ const OrganizationPageInner: FC<OrganizationPageInnerProps> = (props) => {
               </span>
             }
           />
-          <Form {...formItemLayout} form={form} onFinish={handleSubmit}>
-            <Form.Item label="Pet Name" name="petName">
-              <Input placeholder="Bob" />
-            </Form.Item>
-            <Form.Item>
-              <Button htmlType="submit">Submit</Button>
-            </Form.Item>
-          </Form>
         </div>
       </Col>
     </Row>

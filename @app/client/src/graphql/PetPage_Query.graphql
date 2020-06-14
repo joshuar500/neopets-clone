@@ -2,11 +2,14 @@ fragment PetPage_UserPets on UserPet {
   id
   petName
   lastFed
+  slug
+  experience
+  level
 }
 
 fragment PetPage_Query on Query {
   ...SharedLayout_Query
-  userPet(id: $id) {
+  userPetBySlug(slug: $slug) {
     id
     ...PetPage_UserPets
   }

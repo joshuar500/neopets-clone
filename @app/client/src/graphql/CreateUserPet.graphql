@@ -3,10 +3,11 @@ fragment CreatedUserPet on UserPet {
   petName
   slug
   level
+  lastFed
 }
 
 mutation CreateUserPet($petName: String!, $slug: String!) {
-  createUserPet(input: { userPet: { petName: $petName, slug: $slug } }) {
+  createUserPet(input: { petName: $petName, slug: $slug }) {
     userPet {
       id
       ...CreatedUserPet

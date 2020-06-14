@@ -847,7 +847,8 @@ CREATE TABLE app_public.user_pets (
 -- Name: TABLE user_pets; Type: COMMENT; Schema: app_public; Owner: -
 --
 
-COMMENT ON TABLE app_public.user_pets IS 'A pet owned by a `User`.';
+COMMENT ON TABLE app_public.user_pets IS '@omit create
+A pet owned by a `User`.';
 
 
 --
@@ -924,10 +925,10 @@ $$;
 
 
 --
--- Name: create_pet(text, public.citext); Type: FUNCTION; Schema: app_public; Owner: -
+-- Name: create_user_pet(text, public.citext); Type: FUNCTION; Schema: app_public; Owner: -
 --
 
-CREATE FUNCTION app_public.create_pet(pet_name text, slug public.citext) RETURNS app_public.user_pets
+CREATE FUNCTION app_public.create_user_pet(pet_name text, slug public.citext) RETURNS app_public.user_pets
     LANGUAGE plpgsql SECURITY DEFINER
     SET search_path TO 'pg_catalog', 'public', 'pg_temp'
     AS $$
@@ -2783,6 +2784,20 @@ GRANT UPDATE(last_fed) ON TABLE app_public.user_pets TO graphile_starter_visitor
 
 
 --
+-- Name: COLUMN user_pets.level; Type: ACL; Schema: app_public; Owner: -
+--
+
+GRANT UPDATE(level) ON TABLE app_public.user_pets TO graphile_starter_visitor;
+
+
+--
+-- Name: COLUMN user_pets.experience; Type: ACL; Schema: app_public; Owner: -
+--
+
+GRANT UPDATE(experience) ON TABLE app_public.user_pets TO graphile_starter_visitor;
+
+
+--
 -- Name: COLUMN user_pets.slug; Type: ACL; Schema: app_public; Owner: -
 --
 
@@ -2798,11 +2813,11 @@ GRANT ALL ON FUNCTION app_public.create_pet(pet_name text) TO graphile_starter_v
 
 
 --
--- Name: FUNCTION create_pet(pet_name text, slug public.citext); Type: ACL; Schema: app_public; Owner: -
+-- Name: FUNCTION create_user_pet(pet_name text, slug public.citext); Type: ACL; Schema: app_public; Owner: -
 --
 
-REVOKE ALL ON FUNCTION app_public.create_pet(pet_name text, slug public.citext) FROM PUBLIC;
-GRANT ALL ON FUNCTION app_public.create_pet(pet_name text, slug public.citext) TO graphile_starter_visitor;
+REVOKE ALL ON FUNCTION app_public.create_user_pet(pet_name text, slug public.citext) FROM PUBLIC;
+GRANT ALL ON FUNCTION app_public.create_user_pet(pet_name text, slug public.citext) TO graphile_starter_visitor;
 
 
 --
